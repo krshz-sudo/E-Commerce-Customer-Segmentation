@@ -1,53 +1,57 @@
-# E-Commerce Customer Segmentation (RFM, K-Means, DBSCAN, PCA, t-SNE)
+# E-Commerce Customer Segmentation using RFM
+
+Customer segmentation of an online retailer using **RFM analysis**, **K-Means**, **DBSCAN**, **PCA** and **t-SNE**, ending with marketing personas for each segment.
 
 **Author:** Utkarsh Singh
 
-## Problem
-An online retailer wants to personalise marketing instead of sending one campaign to everyone. Using **RFM (Recency, Frequency, Monetary)** features, this project clusters customers, visualises the segments and derives **actionable marketing personas**.
+## Dataset
+[Online Retail dataset](https://archive.ics.uci.edu/dataset/352/online+retail) from the UCI Machine Learning Repository (Daqing Chen, CC BY 4.0).
+* Transactions of a UK-based online gift retailer from 01-12-2010 to 09-12-2011
+* 541,909 rows and 8 columns (`InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, Country`)
+* After cleaning: 397,884 rows and **4,338 customers**
+* File used: `data/online_retail.csv`
 
-## Approach
-1. Build the RFM table from transaction data.
-2. Pre-process: `log1p` (to reduce skew) and `StandardScaler`.
-3. **PCA** for dimensionality reduction and interpretation of loadings.
-4. **K-Means** with elbow, silhouette and Davies-Bouldin to choose k.
-5. **DBSCAN** with k-distance graph and a small grid search for `eps` / `min_samples`.
-6. **t-SNE** to visualise the segments.
-7. Profile each cluster and map it to a persona and a marketing action.
+## Method
+1. **Cleaning:** removed rows without `CustomerID`, cancelled/returned orders (negative quantity) and zero prices.
+2. **RFM table:** Recency (days since last purchase), Frequency (number of orders), Monetary (total spend) for every customer.
+3. **Log transform and scaling** to handle the skewed values.
+4. **PCA** to 2 components (keeps about 94% of the variance).
+5. **K-Means** with the elbow method and silhouette score, k = 4.
+6. **DBSCAN** (`eps = 0.5`, `min_samples = 10`) for comparison and outlier detection.
+7. **t-SNE** and PCA plots to visualise the clusters.
+8. Profiling each cluster and defining marketing personas.
 
-## Results (synthetic run, 3,000 customers)
-| Persona | % customers | % revenue | Action |
-|---|---|---|---|
-| Champions | ~19 | ~64 | VIP programme, early access, referrals |
-| At-Risk Big Spenders | ~30 | ~27 | Win-back outreach, high-value coupon |
-| New / Promising | ~22 | ~4.5 | Welcome series, second-purchase incentive |
-| Hibernating / Lost | ~29 | ~4.4 | Cheap automated reactivation |
+## Results
+| Persona | Customers | Revenue | Avg recency (days) | Avg orders | Avg spend |
+|---|---|---|---|---|---|
+| Champions | 16.5% | 64.9% | 12 | 13.7 | 8,074 |
+| Regular customers | 27.0% | 23.7% | 71 | 4.1 | 1,803 |
+| New customers | 19.3% | 5.2% | 18 | 2.1 | 552 |
+| Lost customers | 37.2% | 6.2% | 183 | 1.3 | 344 |
 
-K-Means: k = 4, silhouette about 0.35, Davies-Bouldin about 0.93. PCA: 2 components explain about 96% of variance. DBSCAN: eps 0.5, min_samples 10, under 1% noise.
+* A small group of Champions brings about two-thirds of the revenue.
+* DBSCAN found 2 broad clusters and 79 outliers; K-Means gave more useful segments for marketing.
 
-![t-SNE personas](outputs/07_tsne_personas.png)
+![t-SNE view of the clusters](images/tsne_clusters.png)
 
-## Data
-* If `data/online_retail.csv` exists (the [UCI Online Retail dataset](https://archive.ics.uci.edu/dataset/352/online+retail), columns `InvoiceNo, CustomerID, InvoiceDate, Quantity, UnitPrice`), it is used.
-* Otherwise the code **generates synthetic transactions with the same schema**, so everything runs out of the box. Numbers above come from the synthetic data and will differ on the real dataset.
+![Share of customers vs share of revenue](images/customers_vs_revenue.png)
 
 ## Project structure
 ```
 .
-├── src/rfm_segmentation.py              # full pipeline (run as a script)
-├── notebooks/rfm_customer_segmentation.ipynb   # executed notebook with explanations
-├── outputs/                             # figures, rfm_with_segments.csv, persona_summary.csv, summary.json
-├── data/                                # place online_retail.csv here (optional)
-└── requirements.txt
+├── customer_segmentation.ipynb   # full analysis with explanations
+├── data/online_retail.csv        # dataset
+├── images/                       # saved plots
+├── requirements.txt
+└── README.md
 ```
 
-## Run
+## How to run
 ```bash
 pip install -r requirements.txt
-python src/rfm_segmentation.py          # regenerates outputs/
-jupyter notebook notebooks/rfm_customer_segmentation.ipynb
+jupyter notebook customer_segmentation.ipynb
 ```
 
-## Limitations and future work
-* RFM ignores product mix, returns and channel data; adding basket size or category features could sharpen the segments.
-* Personas are rule-based labels on K-Means clusters and should be validated with a real campaign (A/B test).
-* Other options to compare: Gaussian Mixture Models, hierarchical clustering, RFM quintile scoring.
+## Limitations
+* Only purchase history is used (no product category, location or demographics).
+* The personas should be validated with real marketing campaigns.
