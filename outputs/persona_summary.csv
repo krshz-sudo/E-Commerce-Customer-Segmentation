@@ -1,0 +1,5 @@
+KMeans,Recency,Frequency,Monetary,Customers,Share_%,Revenue_share_%,Persona,Action
+0,18.932411674347158,1.8310291858678955,431.59563748079876,651,21.7,4.5,New / Promising,"Welcome series, second-purchase incentive within 30 days, onboarding emails."
+1,118.34719101123595,4.807865168539326,1898.5444382022472,890,29.7,27.1,At-Risk Big Spenders,"Personal win-back outreach, high-value coupon, 'we miss you' campaign, feedback survey."
+2,18.965635738831615,11.65807560137457,6840.146993127148,582,19.4,63.9,Champions,"VIP programme, early access to launches, referral rewards. Do not discount; reward loyalty."
+3,192.93842645381983,1.5473204104903078,314.8604675028506,877,29.2,4.4,Hibernating / Lost,"Low-cost reactivation email, clearance offers; suppress after 2 failed attempts to save budget."

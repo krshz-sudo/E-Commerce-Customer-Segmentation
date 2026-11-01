@@ -1,0 +1,14 @@
+{
+  "data_source": "Synthetic transactions (same schema as UCI Online Retail)",
+  "customers": 3000,
+  "best_k": 4,
+  "kmeans_silhouette": 0.346,
+  "pca_var_2comp": 0.957,
+  "dbscan": {
+    "eps": 0.5,
+    "min_samples": 10,
+    "clusters": 2,
+    "noise_pct": 0.8,
+    "silhouette": 0.271
+  }
+}
