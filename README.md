@@ -47,5 +47,7 @@ python src/rfm_segmentation.py          # regenerates outputs/
 jupyter notebook notebooks/rfm_customer_segmentation.ipynb
 ```
 
-## Productionising on AWS
-S3 for data, SageMaker Processing for RFM features, a training job for scaler + PCA + K-Means, Model Registry for versioning, nightly Batch Transform for segment assignment, SageMaker Pipelines + EventBridge for orchestration, Model Monitor for drift.
+## Limitations and future work
+* RFM ignores product mix, returns and channel data; adding basket size or category features could sharpen the segments.
+* Personas are rule-based labels on K-Means clusters and should be validated with a real campaign (A/B test).
+* Other options to compare: Gaussian Mixture Models, hierarchical clustering, RFM quintile scoring.
